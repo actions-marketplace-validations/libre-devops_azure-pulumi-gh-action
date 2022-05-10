@@ -1,7 +1,7 @@
 #Use supplier image
 FROM docker.io/ubuntu:focal
 
-LABEL org.opencontainers.image.source=https://github.com/libre-devops/azure-terraform-gh-action
+LABEL org.opencontainers.image.source=https://github.com/libre-devops/azure-pulumi-gh-action
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV DEBIAN_FRONTEND=noninteractive
@@ -39,8 +39,8 @@ RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/instal
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/linuxbrew/.bashrc && \
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-RUN brew install tfsec python3 terraform tree
-RUN pip3 install terraform-compliance checkov
+RUN brew install python3 pulumi tree
+RUN pip3 install checkov
 
 USER root 
 
