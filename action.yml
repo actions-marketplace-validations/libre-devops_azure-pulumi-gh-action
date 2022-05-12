@@ -1,26 +1,30 @@
 # action.yml
-name: 'Libre DevOps - Run pulumi for Azure -  GitHub Action'
-description: 'The heavily opinionated Libre DevOps Action to run pulumi, pulumi-compliance, tfsec and checkov, targetting Azure.'
+name: 'Libre DevOps - Run Pulumi for Azure -  GitHub Action'
+description: 'The heavily opinionated Libre DevOps Action to run Pulumi in Azure.'
 author: "Craig Thacker <craig@craigthacker.dev>"
 branding:
   icon: 'terminal'
-  color: 'green'
+  color: 'red'
 
 inputs:
   pulumi-path:
     description: 'The absolute path in Linux format to your pulumi code'
     required: true
 
-  pulumi-workspace-name:
-    description: 'The name of a pulumi workspace, should be in plain text string'
+  pulumi-stack-name:
+    description: 'The name of a pulumi stack, should be in plain text string'
     required: true
 
-  pulumi-backend-storage-rg-name:
-    description: 'The name of resource group your storage account exists in,  needed for state file storage'
+  pulumi-config-passphrase:
+    description: 'The secret passphrase to your state, needed for security'
     required: true
 
   pulumi-backend-storage-account-name:
     description: 'The name of your storage account , needed for state file storage'
+    required: true
+
+  pulumi-backend-url-prefix:
+    description: 'The backend url of your backend, for Azure. it should be azblob:// needed for state file storage'
     required: true
 
   pulumi-backend-blob-container-name:
@@ -29,10 +33,6 @@ inputs:
 
   pulumi-backend-storage-access-key:
     description: 'The key to access your storage account, needed for state file storage'
-    required: true
-
-  pulumi-backend-state-name:
-    description: 'The name of your statefilee, needed for state pulumi'
     required: true
 
   pulumi-provider-client-id:
@@ -51,21 +51,12 @@ inputs:
     description: 'The tenant id of which contains subscription you wish to deploy to, needed to authenticate to your tenant'
     required: true
 
-  pulumi-compliance-path:
-    description: 'The path to your pulumi-compliance policies, should be a local path or passed as git: etc'
-    required: true
-
-  checkov-skipped-tests:
-    description: 'The CKV codes you wish to skip, if any.'
-    required: true
-    default: ""
-
   run-pulumi-destroy:
     description: 'Do you want to run pulumi destroy? - Set to true to trigger pulumi plan -destroy'
     required: true
     default: "false"
     
-  run-pulumi-plan-only:
+  run-pulumi-preview-only:
     description: 'Do you only want to run pulumi plan & never run the apply or apply destroy? - Set to true to trigger pulumi plan only.'
     required: true
     default: "true"
@@ -75,17 +66,15 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.pulumi-path }}
-    - ${{ inputs.pulumi-workspace-name }}
-    - ${{ inputs.pulumi-backend-storage-rg-name }}
+    - ${{ inputs.pulumi-stack-name }}
+    - ${{ inputs.pulumi-config-passphrase }}
     - ${{ inputs.pulumi-backend-storage-account-name }}
+    - ${{ inputs.pulumi-backend-url-prefix }}
     - ${{ inputs.pulumi-backend-blob-container-name }}
     - ${{ inputs.pulumi-backend-storage-access-key }}
-    - ${{ inputs.pulumi-backend-state-name }}
     - ${{ inputs.pulumi-provider-client-id }}
     - ${{ inputs.pulumi-provider-client-secret }}
     - ${{ inputs.pulumi-provider-subscription-id }}
     - ${{ inputs.pulumi-provider-tenant-id }}
-    - ${{ inputs.pulumi-compliance-path }}
-    - ${{ inputs.checkov-skipped-tests }}
     - ${{ inputs.run-pulumi-destroy }}
     - ${{ inputs.run-pulumi-plan-only }}

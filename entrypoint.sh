@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -eou pipefail
 
 print_success() {
     lightcyan='\033[1;36m'
@@ -20,221 +20,141 @@ print_alert() {
     echo -e "${yellow}$1${nocolor}"
 }
 
-print_alert "checkov version = $(print_success $(checkov --version))"
-print_alert "tfsec version = $(print_success $(tfsec --version))"
+print_alert "pulumi version = $(print_success $(pulumi version))"
+print_alert "dotnet version = $(print_success $(dotnet --version))"
+print_alert "golang version = $(print_success $(go version))"
+print_alert "node version = $(print_success $(node --version))"
+print_alert "python3 version = $(print_success $(python3 --version))"
 
-print_alert "terraform-compliance version below"
-terraform-compliance --version
-
-print_alert "terraform version below"
-terraform -v
+print_alert "Java version below"
+java -version
 
 # Prepare variables with better common names
 if [[ -n "${1}" ]]; then
-    terraform_path="${1}" && \
-        cd "${terraform_path}"
+    pulumi_path="${1}" && \
+        cd "${pulumi_path}"
 else
-    print_error "Code path is empty or invalid, check the following tree output and see if it is as you expect - Error - LDO_TF_CODE_PATH" && tree . && exit 1
+    print_error "Code path is empty or invalid, check the following tree output and see if it is as you expect - Error - LDO_PULUMI_CODE_PATH" && tree . && exit 1
 fi
 
 if [[ -n "${2}" ]]; then
-    rm -rf .terraform && \
-        mkdir -p ".terraform" && \
-        touch ".terraform/environment"
-    terraform_workspace_name="${2}" && \
-        printf '%s' "${terraform_workspace_name}" | tee .terraform/environment >/dev/null
+    pulumi_stack_name="${2}" 
 else
-    print_error "Workspace variable appears to be empty or invalid, ensure that you can see - ${2} - if you cannot, set your workspace as a plain text chars and try again - Error - LDO_TF_WORKSPACE" && exit 1
+    print_error "Pulumi stack variable appears to be empty or invalid, ensure that you can see - ${2} - if you cannot, set your workspace as a plain text chars and try again - Error - LDO_PULUMI_WORKSPACE" && exit 1
 fi
 
 if [[ -n "${3}" ]]; then
-    terraform_backend_sa_rg_name="${3}"
+    pulumi_config_passphrase="${3}"
 else
-    print_error "Variable assignment for backend storage account resource group failed or is invalid, ensure it is correct and try again - Error LDO_TF_BACKEND_SA_RG_NAME" && exit 1
+    print_error "Variable assignment for  failed  Pulumi state config or is invalid, ensure it is correct and try again - Error LDO_PULUMI_CONFIG_PASSPHRASE" && exit 1
 fi
 
 if [[ -n "${4}" ]]; then
-    terraform_backend_sa_name="${4}"
+    pulumi_backend_sa_name="${4}"
 else
-    print_error "Variable assignment for backend storage account name failed or is invalid, ensure it is correct and try again - Error LDO_TF_BACKEND_SA_NAME" && exit 1
+    print_error "Variable assignment for backend storage account name failed or is invalid, ensure it is correct and try again - Error LDO_PULUMI_BACKEND_SA_NAME" && exit 1
 fi
 
 if [[ -n "${5}" ]]; then
-    terraform_backend_blob_container_name="${5}"
+    pulumi_backend_url_prefix="${5}"
 else
-    print_error "Variable assignment for backend storage account blob container failed or is invalid, ensure it is correct and try again - Error LDO_TF_BACKEND_BLOB_CONTAINER_NAME" && exit 1
+    print_error "Variable assignment for backend storage account name failed or is invalid, ensure it is correct and try again - Error LDO_PULUMI_BACKEND_SA_NAME" && exit 1
 fi
 
 if [[ -n "${6}" ]]; then
-    terraform_backend_storage_access_key="${6}"
+    pulumi_backend_blob_container_name="${6}"
 else
-    print_error "Variable assignment for backend storage access key name has failed or is invalid, ensure it is correct and try again - Error LDO_TF_BACKEND_SA_ACCESS_KEY" && exit 1
+    print_error "Variable assignment for backend storage account blob container failed or is invalid, ensure it is correct and try again - Error LDO_PULUMI_BACKEND_BLOB_CONTAINER_NAME" && exit 1
 fi
 
 if [[ -n "${7}" ]]; then
-    terraform_backend_state_name="${7}"
+    pulumi_backend_storage_access_key="${7}"
 else
-    print_error "Variable assignment for backend state name has failed or is invalid, ensure you are providing a canonical statefile name - Error LDO_TF_BACKEND_STATE_NAME" && exit 1
+    print_error "Variable assignment for backend storage access key name has failed or is invalid, ensure it is correct and try again - Error LDO_PULUMI_BACKEND_SA_ACCESS_KEY" && exit 1
 fi
 
 if [[ -n "${8}" ]]; then
-    terraform_provider_client_id="${8}"
+    pulumi_provider_client_id="${8}"
 else
-    print_error "Variable assignment for provider client id has failed or is invalid,  ensure it is correct and try again - Error LDO_TF_AZURERM_PROVIDER_CLIENT_ID" && exit 1
+    print_error "Variable assignment for provider client id has failed or is invalid,  ensure it is correct and try again - Error LDO_PULUMI_AZURERM_PROVIDER_CLIENT_ID" && exit 1
 fi
 
 if [[ -n "${9}" ]]; then
-    terraform_provider_client_secret="${9}"
+    pulumi_provider_client_secret="${9}"
 else
-    print_error "Variable assignment for provider client secret has failed or is invalid, ensure it is correct and try again - Error LDO_TF_AZURERM_PROVIDER_CLIENT_SECRET" && exit 1
+    print_error "Variable assignment for provider client secret has failed or is invalid, ensure it is correct and try again - Error LDO_PULUMI_AZURERM_PROVIDER_CLIENT_SECRET" && exit 1
 fi
 
 if [[ -n "${10}" ]]; then
-    terraform_provider_client_subscription_id="${10}"
+    pulumi_provider_client_subscription_id="${10}"
 else
-    print_error "Variable assignment for provider subscription id has failed or is invalid, ensure it is correct and try again - Error LDO_TF_AZURERM_PROVIDER_SUBSCRIPTION_ID" && exit 1
+    print_error "Variable assignment for provider subscription id has failed or is invalid, ensure it is correct and try again - Error LDO_PULUMI_AZURERM_PROVIDER_SUBSCRIPTION_ID" && exit 1
 fi
 
 if [[ -n "${11}" ]]; then
-    terraform_provider_client_tenant_id="${11}"
+    pulumi_provider_client_tenant_id="${11}"
 else
-    print_error "Variable assignment for provider tenant id has failed or is invalid, ensure it is correct and try again - Error LDO_TF_AZURERM_PROVIDER_TENANT_ID" && exit 1
+    print_error "Variable assignment for provider tenant id has failed or is invalid, ensure it is correct and try again - Error LDO_PULUMI_AZURERM_PROVIDER_TENANT_ID" && exit 1
 fi
 
 if [[ -n "${12}" ]]; then
-    terraform_compliance_path="${12}"
+    run_pulumi_destroy="${12}"
 else
-    print_error "Terraform compliance path is invalid or empty, ensure you are using either a accurate local path or remote git path which the action can access try again - Error LDO_TF_TERRAFORM_COMPLIANCE" && exit 1
+    print_error "pulumi destroy is empty, it must be either true or false - change this and try again - Error code - LDO_PULUMI_pulumi_DESTROY" && exit 1
 fi
 
 if [[ -n "${13}" ]]; then
-    checkov_skipped_test="${13}"
+    run_pulumi_preview_only="${13}"
 else
-    checkov_skipped_test=""
+    print_error "pulumi Plan only is empty, it must be either true or false - change this and try again - Error code - LDO_PULUMI_pulumi_PLAN_ONLY" && exit 1
 fi
 
-if [[ -n "${14}" ]]; then
-    run_terraform_destroy="${14}"
-else
-    print_error "Terraform destroy is empty, it must be either true or false - change this and try again - Error code - LDO_TF_TERRAFORM_DESTROY" && exit 1
-fi
+export ARM_CLIENT_ID="${pulumi_provider_client_id}"
+export ARM_CLIENT_SECRET="${pulumi_provider_client_secret}"
+export ARM_SUBSCRIPTION_ID="${pulumi_provider_client_subscription_id}"
+export ARM_TENANT_ID="${pulumi_provider_client_tenant_id}"
+export PULUMI_CONFIG_PASSPHRASE="${pulumi_config_passphrase}"
+export AZURE_STORAGE_ACCOUNT="${pulumi_backend_sa_name}"
+export AZURE_STORAGE_KEY="${pulumi_backend_storage_access_key}"
 
-if [[ -n "${15}" ]]; then
-    run_terraform_plan_only="${15}"
-else
-    print_error "Terraform Plan only is empty, it must be either true or false - change this and try again - Error code - LDO_TF_TERRAFORM_PLAN_ONLY" && exit 1
-fi
+# Run pulumi Plan Only
+if [ "${run_pulumi_destroy}" = "false" ] && [ "${run_pulumi_preview_only}"  = "true" ]; then
 
-export ARM_CLIENT_ID="${terraform_provider_client_id}"
-export ARM_CLIENT_SECRET="${terraform_provider_client_secret}"
-export ARM_SUBSCRIPTION_ID="${terraform_provider_client_subscription_id}"
-export ARM_TENANT_ID="${terraform_provider_client_tenant_id}"
+    pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
 
-# Run Terraform Plan Only
-if [ "${run_terraform_destroy}" = "false" ] && [ "${run_terraform_plan_only}"  = "true" ]; then
+          pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff --color always --emoji
 
-    terraform init \
-        -backend-config="resource_group_name=${terraform_backend_sa_rg_name}" \
-        -backend-config="storage_account_name=${terraform_backend_sa_name}" \
-        -backend-config="access_key=${terraform_backend_storage_access_key}" \
-        -backend-config="container_name=${terraform_backend_blob_container_name}" \
-        -backend-config="key=${terraform_backend_state_name}" && \
-
-        terraform workspace new "${terraform_workspace_name}" || terraform workspace select "${terraform_workspace_name}"
-
-    terraform validate && \
-
-        terraform plan -out pipeline.plan && \
-
-        print_alert "Running terraform-compliance now..."
-
-    terraform-compliance -p pipeline.plan -f "${terraform_compliance_path}" && \
-
-        print_alert "Running tfsec now..."
-
-    tfsec && \
-
-        terraform show -json pipeline.plan | tee pipeline.plan.json >/dev/null && \
-
-        print_alert "Running checkov now..."
-
-    checkov -f pipeline.plan.json --skip-check "${checkov_skipped_test}" && \
 
         print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
 
-    # Run Terraform Plan and Terraform Apply
-elif [ "${run_terraform_destroy}" = "false" ] && [ "${run_terraform_plan_only}"  = "false" ]; then
+    # Run pulumi Plan and pulumi Apply
+elif [ "${run_pulumi_destroy}" = "false" ] && [ "${run_pulumi_preview_only}"  = "false" ]; then
 
-    terraform init \
-        -backend-config="resource_group_name=${terraform_backend_sa_rg_name}" \
-        -backend-config="storage_account_name=${terraform_backend_sa_name}" \
-        -backend-config="access_key=${terraform_backend_storage_access_key}" \
-        -backend-config="container_name=${terraform_backend_blob_container_name}" \
-        -backend-config="key=${terraform_backend_state_name}" && \
-
-        terraform workspace new "${terraform_workspace_name}" || terraform workspace select "${terraform_workspace_name}"
-
-    terraform validate && \
-
-        terraform plan -out pipeline.plan && \
-
-        print_alert "Running terraform-compliance now..."
-
-    terraform-compliance -p pipeline.plan -f "${terraform_compliance_path}" && \
-
-        print_alert "Running tfsec now..."
-
-    tfsec && \
-
-        terraform show -json pipeline.plan | tee pipeline.plan.json >/dev/null && \
-
-        print_alert "Running checkov now..."
-
-    checkov -f pipeline.plan.json --skip-check "${checkov_skipped_test}" && \
-
-        print_alert "Running terraform apply now..."
-
-    terraform apply -auto-approve pipeline.plan
+    pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
+          
+          pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
+          
+          pulumi --color always --emoji up --stack "${pulumi_stack_name}" --yes --diff
 
     print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
 
-    # Run Terraform Plan -Destroy only
-elif [ "${run_terraform_destroy}" = "true" ] && [ "${run_terraform_plan_only}"  = "true" ]; then
+    # Run pulumi Plan -Destroy only
+elif [ "${run_pulumi_destroy}" = "true" ] && [ "${run_pulumi_preview_only}"  = "true" ]; then
 
-    terraform init \
-        -backend-config="resource_group_name=${terraform_backend_sa_rg_name}" \
-        -backend-config="storage_account_name=${terraform_backend_sa_name}" \
-        -backend-config="access_key=${terraform_backend_storage_access_key}" \
-        -backend-config="container_name=${terraform_backend_blob_container_name}" \
-        -backend-config="key=${terraform_backend_state_name}" && \
+     pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
+          
+          pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
 
-        terraform workspace new "${terraform_workspace_name}" || terraform workspace select "${terraform_workspace_name}"
+        print_success "It is not possible at this time to preview a destroy" || { print_error "Build Failed" ; exit 1; }
 
-    terraform validate && \
+    # Run pulumi plan -destroy and pulumi apply
+elif [ "${run_pulumi_destroy}" = "true" ] && [ "${run_pulumi_preview_only}"  = "false" ]; then
 
-        terraform plan -destroy -out pipeline.plan && \
-
-        print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
-
-    # Run terraform plan -destroy and terraform apply
-elif [ "${run_terraform_destroy}" = "true" ] && [ "${run_terraform_plan_only}"  = "false" ]; then
-
-    terraform init \
-        -backend-config="resource_group_name=${terraform_backend_sa_rg_name}" \
-        -backend-config="storage_account_name=${terraform_backend_sa_name}" \
-        -backend-config="access_key=${terraform_backend_storage_access_key}" \
-        -backend-config="container_name=${terraform_backend_blob_container_name}" \
-        -backend-config="key=${terraform_backend_state_name}" && \
-
-        terraform workspace new "${terraform_workspace_name}" || terraform workspace select "${terraform_workspace_name}"
-
-    terraform validate && \
-
-        terraform plan -destroy -out pipeline.plan && \
-
-        print_alert "Running terraform apply now...  Note, this is a terraform destroy run"
-
-    terraform apply -auto-approve pipeline.plan
+     pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
+          
+          pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
+          
+          pulumi --color always --emoji destroy --stack "${pulumi_stack_name}" --yes --diff
 
     print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
 
