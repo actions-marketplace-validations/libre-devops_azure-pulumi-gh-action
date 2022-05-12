@@ -28,7 +28,7 @@ jobs:
         uses: libre-devops/azure-pulumi-gh-action@v1
         with:
           pulumi-path: "pulumi/hello-world"
-          pulumi-stack-name: "dev"
+          pulumi-stack-name: dev
           pulumi-config-passphrase: ${{ secrets.SpokeSaRgName }}
           pulumi-backend-storage-account-name: ${{ secrets.SpokePulumiPassphrase }}
           pulumi-backend-url-prefix: "azblob://"
