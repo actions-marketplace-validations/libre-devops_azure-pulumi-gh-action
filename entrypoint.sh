@@ -122,6 +122,8 @@ if [ "${run_pulumi_destroy}" = "false" ] && [ "${run_pulumi_preview_only}"  = "t
 
     pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
 
+    pulumi stack select "${pulumi_stack_name}" --create
+
     pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
 
     print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
