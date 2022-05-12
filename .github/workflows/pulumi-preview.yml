@@ -1,4 +1,4 @@
-name: 'Pulumi Plan'
+name: 'Pulumi Preview'
 
 #Allow run manually or on push to main or in PR closure
 on:
