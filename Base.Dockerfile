@@ -28,7 +28,7 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y \
                 mkdir -p /home/linuxbrew/.linuxbrew && \
                 chown -R linuxbrew: /home/linuxbrew/.linuxbrew
 
-RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
 dpkg -i packages-microsoft-prod.deb && \
 rm packages-microsoft-prod.deb && \
 apt-get update && \
