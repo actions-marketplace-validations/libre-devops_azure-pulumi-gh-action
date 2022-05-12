@@ -1,0 +1,42 @@
+name: 'Pulumi Plan'
+
+#Allow run manually or on push to main or in PR closure
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+
+jobs:
+  azure-pulumi-job:
+    name: 'Pulumi Build'
+    runs-on: ubuntu-latest
+    environment: tst
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Libre DevOps - Run Pulumi for Azure - GitHub Action
+        id: pulumi-build
+        uses: libre-devops/azure-pulumi-gh-action@v1
+        with:
+          pulumi-path: "pulumi/hello-world"
+          pulumi-stack-name: "dev"
+          pulumi-config-passphrase: ${{ secrets.SpokeSaRgName }}
+          pulumi-backend-storage-account-name: ${{ secrets.SpokePulumiPassphrase }}
+          pulumi-backend-url-prefix: "azblob://"
+          pulumi-backend-blob-container-name: ${{ secrets.SpokeSaBlobContainerName }}
+          pulumi-backend-storage-access-key: ${{ secrets.SpokeSaPrimaryKey }}
+          pulumi-provider-client-id: ${{ secrets.SpokeSvpClientId }}
+          pulumi-provider-client-secret: ${{ secrets.SpokeSvpClientSecret }}
+          pulumi-provider-subscription-id: ${{ secrets.SpokeSubId }}
+          pulumi-provider-tenant-id: ${{ secrets.SpokeTenantId }}
+          run-pulumi-destroy: "true"
+          run-pulumi-preview-only: "false"

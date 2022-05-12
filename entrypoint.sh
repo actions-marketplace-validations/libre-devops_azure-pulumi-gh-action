@@ -124,7 +124,6 @@ if [ "${run_pulumi_destroy}" = "false" ] && [ "${run_pulumi_preview_only}"  = "t
 
     pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff --color always --emoji
 
-
     print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
 
     # Run pulumi Plan and pulumi Apply
