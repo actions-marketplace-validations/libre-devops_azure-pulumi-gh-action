@@ -106,7 +106,7 @@ fi
 if [[ -n "${13}" ]]; then
     run_pulumi_preview_only="${13}"
 else
-    print_error "pulumi Plan only is empty, it must be either true or false - change this and try again - Error code - LDO_PULUMI_pulumi_PLAN_ONLY" && exit 1
+    print_error "pulumi plan only is empty, it must be either true or false - change this and try again - Error code - LDO_PULUMI_pulumi_PLAN_ONLY" && exit 1
 fi
 
 export ARM_CLIENT_ID="${pulumi_provider_client_id}"

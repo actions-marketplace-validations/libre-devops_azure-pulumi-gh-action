@@ -77,4 +77,4 @@ runs:
     - ${{ inputs.pulumi-provider-subscription-id }}
     - ${{ inputs.pulumi-provider-tenant-id }}
     - ${{ inputs.run-pulumi-destroy }}
-    - ${{ inputs.run-pulumi-plan-only }}
+    - ${{ inputs.run-pulumi-preview-only }}
