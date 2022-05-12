@@ -40,7 +40,7 @@ parameters:
 
   - name: IMAGE_NAME
     displayName: "The name of the image"
-    default: "azure-terraform-gh-action-base"
+    default: "azure-pulumi-gh-action-base"
     type: string
 
   - name: TAGS
