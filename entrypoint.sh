@@ -38,7 +38,7 @@ else
 fi
 
 if [[ -n "${2}" ]]; then
-    pulumi_stack_name="${2}" 
+    pulumi_stack_name="${2}"
 else
     print_error "Pulumi stack variable appears to be empty or invalid, ensure that you can see - ${2} - if you cannot, set your workspace as a plain text chars and try again - Error - LDO_PULUMI_WORKSPACE" && exit 1
 fi
@@ -122,39 +122,39 @@ if [ "${run_pulumi_destroy}" = "false" ] && [ "${run_pulumi_preview_only}"  = "t
 
     pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
 
-          pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff --color always --emoji
+    pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff --color always --emoji
 
 
-        print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
+    print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
 
     # Run pulumi Plan and pulumi Apply
 elif [ "${run_pulumi_destroy}" = "false" ] && [ "${run_pulumi_preview_only}"  = "false" ]; then
 
     pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
-          
-          pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
-          
-          pulumi --color always --emoji up --stack "${pulumi_stack_name}" --yes --diff
+
+    pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
+
+    pulumi --color always --emoji up --stack "${pulumi_stack_name}" --yes --diff
 
     print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
 
     # Run pulumi Plan -Destroy only
 elif [ "${run_pulumi_destroy}" = "true" ] && [ "${run_pulumi_preview_only}"  = "true" ]; then
 
-     pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
-          
-          pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
+    pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
 
-        print_success "It is not possible at this time to preview a destroy" || { print_error "Build Failed" ; exit 1; }
+    pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
+
+    print_success "It is not possible at this time to preview a destroy" || { print_error "Build Failed" ; exit 1; }
 
     # Run pulumi plan -destroy and pulumi apply
 elif [ "${run_pulumi_destroy}" = "true" ] && [ "${run_pulumi_preview_only}"  = "false" ]; then
 
-     pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
-          
-          pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
-          
-          pulumi --color always --emoji destroy --stack "${pulumi_stack_name}" --yes --diff
+    pulumi --color always --emoji login "${pulumi_backend_url_prefix}""${pulumi_backend_blob_container_name}"
+
+    pulumi --color always --emoji preview --stack "${pulumi_stack_name}" --diff
+
+    pulumi --color always --emoji destroy --stack "${pulumi_stack_name}" --yes --diff
 
     print_success "Build ran successfully" || { print_error "Build Failed" ; exit 1; }
 
