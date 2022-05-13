@@ -48,5 +48,6 @@ RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/instal
 RUN brew install python3 pulumi tree go node openjdk gradle maven virtualenv
 
 USER root 
+RUN apt-get update && apt-get install -y python3-venv && apt-get autoremove
 
 WORKDIR /
