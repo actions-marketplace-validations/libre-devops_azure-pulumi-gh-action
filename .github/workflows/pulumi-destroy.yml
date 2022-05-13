@@ -2,6 +2,11 @@ name: 'Pulumi Destroy'
 
 #Allow run manually or on push to main or in PR closure
 on:
+  push:
+    branches:
+    - main
+  pull_request:
+    types: [closed]
   workflow_dispatch:
 
 jobs:
@@ -23,9 +28,9 @@ jobs:
         uses: libre-devops/azure-pulumi-gh-action@v1
         with:
           pulumi-path: "pulumi/hello-world"
-          pulumi-stack-name: "dev"
-          pulumi-config-passphrase: ${{ secrets.SpokeSaRgName }}
-          pulumi-backend-storage-account-name: ${{ secrets.SpokePulumiPassphrase }}
+          pulumi-stack-name: dev
+          pulumi-config-passphrase: ${{ secrets.SpokePulumiPassphrase }}
+          pulumi-backend-storage-account-name: ${{ secrets.SpokeSaName }}
           pulumi-backend-url-prefix: "azblob://"
           pulumi-backend-blob-container-name: ${{ secrets.SpokeSaBlobContainerName }}
           pulumi-backend-storage-access-key: ${{ secrets.SpokeSaPrimaryKey }}
