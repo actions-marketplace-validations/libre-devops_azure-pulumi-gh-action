@@ -45,7 +45,7 @@ RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/instal
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/linuxbrew/.bashrc && \
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-RUN brew install python3 pulumi tree go node openjdk gradle maven
+RUN brew install python3 pulumi tree go node openjdk gradle maven virtualenv
 
 USER root 
 
