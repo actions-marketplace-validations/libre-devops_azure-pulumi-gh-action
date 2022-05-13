@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xeou pipefail
+set -eou pipefail
 
 print_success() {
     lightcyan='\033[1;36m'
