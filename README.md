@@ -64,15 +64,6 @@ jobs:
 
 ```
 
-### Logic
-
-```
-if run-pulumi-destroy = false AND run-pulumi-preview-only = true == Run pulumi plan but NEVER run pulumi apply
-if run-pulumi-destroy = true AND run-pulumi-preview-only = true == Run pulumi plan -destroy but NEVER run pulumi apply
-if run-pulumi-destroy = false AND run-pulumi-preview-only = false == Run pulumi plan AND run pulumi apply
-if run-pulumi-destroy = run AND run-pulumi-preview-only = false == Run pulumi plan -destroy AND run pulumi apply
-```
-
 
 ### Inputs
 
