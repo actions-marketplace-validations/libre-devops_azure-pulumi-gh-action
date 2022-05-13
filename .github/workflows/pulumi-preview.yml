@@ -22,18 +22,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Create Pulumi venv
-        id: pulumi-venv
-        run: python3 -m venv venv
-        working-directory: "pulumi/hello-world"
-        
-      - name: Install Pulumi deps
-        id: pulumi-deps
-        run: |
-           source venv/bin/activate
-           pip3 install -r requirements.txt
-        working-directory: "pulumi/hello-world"
 
       - name: Libre DevOps - Run Pulumi for Azure - GitHub Action
         id: pulumi-build
