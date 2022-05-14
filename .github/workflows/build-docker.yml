@@ -13,16 +13,16 @@ jobs:
   build-container-job:
     name: 'Build Container'
     runs-on: ubuntu-latest
+    environment: dev
+      env:
+        DOCKERFILE_NAME: "Base.Dockerfile"
+        TAGS: ":latest"
+        IMAGE_NAME: "azdo-pulumi-gh-action-base"
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: pwsh
-      environment: dev
-      env:
-        DOCKERFILE_NAME: "Base.Dockerfile"
-        TAGS: ":latest"
-        IMAGE_NAME: "azdo-pulumi-gh-action-base"
 
     steps:
       - uses: actions/checkout@v3
